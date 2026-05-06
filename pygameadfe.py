@@ -25,8 +25,27 @@ player_y_direction = 0
 player_speed = 3
 
 font = pygame.font.Font("freesansbold.ttf", 20)
+game_over_font = pygame.font.Font("freesansbold.ttf", 60)
 score = 0
 timer = pygame.time.Clock()
+
+def check_collision(playerx, playery, ballx, bally):
+    if abs(playerx - ballx) < 45 and abs(playery - bally) < 55:
+        global player_x_direction
+        global player_y_direction
+        global circle_x_direction
+        global circle_y_direction
+        player_x_direction = 0
+        player_y_direction = 0
+        circle_x_direction = 0
+        circle_y_direction = 0
+        game_over()
+
+
+def game_over():
+    display_game_over = game_over_font.render("Game Over Man", True, red, black)
+    screen.blit(display_game_over, (70, 300))
+
 
 def update_player_position():
     global player_x
@@ -109,9 +128,10 @@ while running:
 
         screen.fill((background))
 
-        pygame.draw.circle(screen, green, (circle_x, circle_y), 30, 5)
-        pygame.draw.circle(screen, red, (circle_x, circle_y), 25)
-        pygame.draw.rect(screen, orange, [player_x, player_y, player_width, player_height])
+        ball = pygame.draw.circle(screen, green, (circle_x, circle_y), 30, 5)
+        ball = pygame.draw.circle(screen, red, (circle_x, circle_y), 25)
+        gamer =  pygame.draw.rect(screen, orange, [player_x, player_y, player_width, player_height])
+        check_collision(gamer.centerx, gamer.centery, ball.centerx, ball.centery)
         display_score = font.render("Score: "+ str(score), True, white, black)
         screen.blit(display_score, (10, 10))
         pygame.display.flip()
