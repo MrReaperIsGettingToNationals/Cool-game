@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website</title>
+
+    <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #0f172a; /* dark blue-gray */
+    }
+
+    #box {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      border-radius: 8px;
+      background: #3b82f6; /* clean blue */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    </style>
+</head>
+<body>
+
+<div id="box"></div>
+
+<script>
+  const box = document.getElementById("box");
+
+  let x = 100;
+  let y = 100;
+  const speed = 4;
+
+  const keys = {};
+
+  document.addEventListener("keydown", (e) => {
+    keys[e.key.toLowerCase()] = true;
+  });
+
+  document.addEventListener("keyup", (e) => {
+    keys[e.key.toLowerCase()] = false;
+  });
+
+  function update() {
+    if (keys["arrowup"] || keys["w"]) y -= speed;
+    if (keys["arrowdown"] || keys["s"]) y += speed;
+    if (keys["arrowleft"] || keys["a"]) x -= speed;
+    if (keys["arrowright"] || keys["d"]) x += speed;
+
+    box.style.transform = `translate(${x}px, ${y}px)`;
+
+    requestAnimationFrame(update);
+  }
+
+  update();
+</script>
+
+</body>
+</html>
