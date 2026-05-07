@@ -27,7 +27,11 @@ player_speed = 3
 font = pygame.font.Font("freesansbold.ttf", 20)
 game_over_font = pygame.font.Font("freesansbold.ttf", 60)
 score = 0
+previous_score = 0
+high_score = 0
 timer = pygame.time.Clock()
+
+gameover = False
 
 def check_collision(playerx, playery, ballx, bally):
     if abs(playerx - ballx) < 45 and abs(playery - bally) < 55:
@@ -43,8 +47,12 @@ def check_collision(playerx, playery, ballx, bally):
 
 
 def game_over():
+    global gameover
     display_game_over = game_over_font.render("Game Over Man", True, red, black)
     screen.blit(display_game_over, (70, 300))
+    display_restart = font.render("Press SPACE to Restart", True, white, black)
+    screen.blit(display_restart, (170, 450))
+    gameover = True
 
 
 def update_player_position():
@@ -125,15 +133,31 @@ while running:
                 player_y_direction = 0
             if event.key == pygame.K_DOWN:
                 player_y_direction = 0
+            if event.key == pygame.K_SPACE and gameover:
+                circle_x = 300
+                circle_y = 300
+                circle_x_direction = 3
+                circle_y_direction = 6
+                player_x = 300
+                player_y = 500
+                previous_score = score
+                if score > high_score:
+                    high_score = score
+                score = 0
+                gameover = False
 
-        screen.fill((background))
+    screen.fill((background))
 
-        ball = pygame.draw.circle(screen, green, (circle_x, circle_y), 30, 5)
-        ball = pygame.draw.circle(screen, red, (circle_x, circle_y), 25)
-        gamer =  pygame.draw.rect(screen, orange, [player_x, player_y, player_width, player_height])
-        check_collision(gamer.centerx, gamer.centery, ball.centerx, ball.centery)
-        display_score = font.render("Score: "+ str(score), True, white, black)
-        screen.blit(display_score, (10, 10))
-        pygame.display.flip()
+    ball = pygame.draw.circle(screen, green, (circle_x, circle_y), 30, 5)
+    ball = pygame.draw.circle(screen, red, (circle_x, circle_y), 25)
+    gamer =  pygame.draw.rect(screen, orange, [player_x, player_y, player_width, player_height])
+    check_collision(gamer.centerx, gamer.centery, ball.centerx, ball.centery)
+    display_score = font.render("Score: "+ str(score), True, white, black)
+    screen.blit(display_score, (10, 10))
+    display_previous_score = font.render("Last Score: "+ str(previous_score), True, white, black)
+    screen.blit(display_previous_score, (10, 30))
+    display_high_score = font.render("High Score: "+ str(high_score), True, white, black)
+    screen.blit(display_high_score, (10, 50))
+    pygame.display.flip()
 
 pygame.quit()
